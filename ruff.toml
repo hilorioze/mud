@@ -1,0 +1,22 @@
+line-length = 99
+
+[lint]
+select = ["ALL"]
+ignore = [
+    # keep-sorted start
+    "COM812",  # missing trailing comma; conflicts with the formatter
+    "CPY",     # copyright notice; the license is in `LICENSE`
+    "D",       # docstrings; not used
+    "E501",    # line too long; long strings are intentional
+    "PLR2004", # magic value in comparison; the name length limits read clearer inline
+    "TC",      # imports used only in annotations; python 3.14 evaluates annotations lazily
+    # keep-sorted end
+]
+
+[lint.per-file-ignores]
+"tests/**/*.py" = [
+    # keep-sorted start
+    "INP001", # implicit namespace package; pytest collects `tests/` without `__init__.py`
+    "S101",   # `assert`; pytest asserts
+    # keep-sorted end
+]

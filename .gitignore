@@ -1,0 +1,15 @@
+# build artifacts
+/dist/
+/result
+/result-*
+
+# development environment (auto-generated)
+/.devenv/
+/.direnv/
+/.pre-commit-config.yaml
+/.venv/
+
+# tool caches
+.pytest_cache/
+.ruff_cache/
+__pycache__/
