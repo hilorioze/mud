@@ -1,0 +1,22 @@
+{
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "charliermarsh.ruff",
+        "jnoortheen.nix-ide",
+        "mkhl.direnv",
+        "ms-python.python"
+      ]
+    },
+    "zed": {
+      "extensions": []
+    }
+  },
+  "image": "ghcr.io/cachix/devenv/devcontainer:latest",
+  "mounts": [
+    "source=devcontainer-nix,target=/nix,type=volume"
+  ],
+  "overrideCommand": false,
+  "updateContentCommand": "devenv test"
+}

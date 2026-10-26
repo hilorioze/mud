@@ -1,0 +1,110 @@
+title = "Gull Rock"
+intro = "A storm is coming in, and the lighthouse on Gull Rock has gone dark. Ships are already out in the bay. Somebody has to get the lamp burning again before nightfall."
+
+start = "landing"
+
+[rooms.landing]
+name = "Boat Landing"
+description = "A stone jetty juts into grey water. Waves slap against the steps where your boat is tied up. A path climbs north into the rocks, and a weathered boathouse stands to the east."
+
+exits = {north = "path", east = "boathouse"}
+
+[rooms.boathouse]
+name = "Boathouse"
+description = "Nets, oars and broken lobster pots are heaped against the walls. It smells of tar and salt. The only way out is back west to the landing."
+
+exits = {west = "landing"}
+
+items = ["oil"]
+
+[rooms.path]
+name = "Cliff Path"
+description = "The path zigzags up between boulders streaked white by the gulls. The landing is below you to the south. The path continues north, and a narrow track leads east along the cliff edge."
+
+exits = {north = "yard", south = "landing", east = "ledge"}
+
+[rooms.ledge]
+name = "Windy Ledge"
+description = "A shelf of rock hangs over the sea. The wind pulls at your coat, and spray drifts up from far below. Something glints in a crack in the stone. The track runs back west."
+
+exits = {west = "path"}
+
+items = ["key"]
+
+[rooms.yard]
+name = "Lighthouse Yard"
+description = "A whitewashed wall surrounds a small yard. The lighthouse rises to the north, its iron door shut. The keeper's cottage is to the west, and the cliff path drops away to the south."
+
+exits = {north = "tower", south = "path", west = "cottage"}
+
+[rooms.yard.locks.north]
+item = "key"
+
+locked = "The lighthouse door is locked. There is a large keyhole under the handle."
+unlocked = "The iron key turns with a screech, and the lighthouse door swings open."
+
+[rooms.cottage]
+name = "Keeper's Cottage"
+description = "A cold stove, a table with one chair, and a bed that has not been slept in for days. The door leads back east to the yard."
+
+exits = {east = "yard"}
+
+items = ["matches", "note"]
+
+[rooms.tower]
+name = "Inside the Lighthouse"
+description = "An iron staircase spirals up into the gloom. Your footsteps ring on the steps. The door to the yard is south."
+
+exits = {south = "yard", up = "lantern"}
+
+[rooms.lantern]
+name = "Lantern Room"
+description = "Glass on every side, and the whole bay spread out below. In the middle stands the great lamp inside its lens, dark and still. The staircase leads down."
+
+exits = {down = "tower"}
+
+items = ["lamp"]
+
+[items.oil]
+name = "a can of lamp oil"
+description = "A heavy tin can, sloshing. The label reads PARAFFIN."
+
+aliases = ["can", "paraffin"]
+
+[items.key]
+name = "an iron key"
+description = "A big old key, red with rust. It looks like it belongs to a heavy door."
+
+[items.matches]
+name = "a box of matches"
+description = "A box of storm matches. Still dry, luckily."
+
+aliases = ["box", "match"]
+
+[items.note]
+name = "a note"
+description = 'The note is in a hurried hand: "Gone to the mainland for supplies. Oil is in the boathouse. Spare key to the light is where the gulls nest on the east ledge. - T."'
+
+aliases = ["paper"]
+
+[items.lamp]
+name = "the great lamp"
+description = "A brass oil lamp inside a lens as tall as you are. The reservoir is empty."
+
+aliases = ["lens"]
+
+fixed = "The lamp is bolted into the lens. It is not going anywhere."
+
+[goal]
+room = "lantern"
+verb = "light"
+items = ["oil", "matches"]
+
+help = "light the lamp"
+missing = "The lamp is dry and cold. It needs oil, and something to light it with."
+
+done = "fills the reservoir, strikes a match and holds it to the wick. The lamp catches, and the great lens begins to turn."
+ending = """
+Far out in the bay, a ship's horn answers the beam. The light of Gull Rock is burning again.
+
+Thanks for playing. The island will be waiting for the next storm."""
