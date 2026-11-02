@@ -27,8 +27,8 @@ mud = "mud.__main__:main"
 [dependency-groups]
 dev = [
     # keep-sorted start
-    "pytest-asyncio>=1.4.1",
-    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.1.post1",
+    "pytest>=9.2.0",
     # keep-sorted end
 ]
 
