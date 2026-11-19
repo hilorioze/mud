@@ -10,9 +10,8 @@ on:
       - devenv.yaml
       - devenv.lock
 
-      # workflow reads `nixConfig` and uses `--inputs-from .`, so changes to them may affect the result
+      # the shared workflow reads `nixConfig`, so changes to it may affect the result
       - flake.nix
-      - flake.lock
 
   pull_request:
     branches: *branches
@@ -23,63 +22,7 @@ on:
 
 jobs:
   build-devenv:
-    concurrency:
-      # one run per pull request status; latest completes last
-      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && 'pr' || 'non-pr' }}
-
-      cancel-in-progress: false
-
     permissions:
-      id-token: write # required so `niks3` can authenticate via OIDC
+      id-token: write # required so niks3 can authenticate via oidc
 
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - uses: cachix/install-nix-action@3dc140bfc76c49fbd4dd958429132e3746bcb086 # v31.11.5
-        with:
-          extra_nix_config: |
-            accept-flake-config = true
-
-            fsync-metadata = false # performance over durability in CI; store is transient
-
-      - run: |
-          {
-            printf 'NIX_CONFIG<<EOF\n'
-            printf 'extra-substituters = %s\n' "$(nix eval --raw --file flake.nix --apply 'flake: builtins.concatStringsSep " " flake.nixConfig.extra-substituters')"
-            printf 'extra-trusted-public-keys = %s\n' "$(nix eval --raw --file flake.nix --apply 'flake: builtins.concatStringsSep " " flake.nixConfig.extra-trusted-public-keys')"
-            printf 'EOF\n'
-          } >> $GITHUB_ENV
-
-      - if: github.event_name != 'pull_request'
-        id: fetch-niks3-bin
-        run: |
-          cat "$(nix build --impure --no-link --print-out-paths --print-build-logs --expr '
-            let
-              flake = builtins.getFlake "github:hilorioze/nixos-dotfiles";
-              system = builtins.currentSystem;
-
-              pkgs = flake.inputs.nixpkgs.legacyPackages.${system};
-
-              niks3 = flake.legacyPackages.${system}.niks3;
-            in
-              pkgs.writeText "niks3-github-output" (pkgs.lib.generators.toKeyValue {} {
-                niks3_root = niks3;
-
-                niks3_bin = pkgs.lib.getExe niks3;
-              })
-          ')" >>$GITHUB_OUTPUT
-
-      - if: github.event_name != 'pull_request'
-        uses: Mic92/niks3-action@01820a2b97ac01531ad9fb859db94af63ffcbd83 # v1.10.0
-        with:
-          niks3-bin: ${{ steps.fetch-niks3-bin.outputs.niks3_bin }}
-
-          server-url: ${{ vars.NIKS3_SERVER }}
-
-      # cache the built `fetch-niks3-bin` output so later runs can reuse it
-      - if: github.event_name != 'pull_request'
-        run: ${{ steps.fetch-niks3-bin.outputs.niks3_bin }} push --server-url ${{ vars.NIKS3_SERVER }} --auth-token-script "node $RUNNER_TEMP/niks3/fetch-oidc-token.mjs" ${{ steps.fetch-niks3-bin.outputs.niks3_root }}
-
-      - run: nix run --inputs-from . nixpkgs#devenv -- build test
+    uses: hilorioze/nixos-dotfiles/.github/workflows/build-devenv.yaml@main
