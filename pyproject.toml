@@ -16,8 +16,8 @@ requires-python = ">=3.14"
 dependencies = [
     # keep-sorted start
     "adaptix>=3.0.0b12",
-    "telnetlib3>=5.0.2",
-    "wcwidth>=0.9.4",
+    "telnetlib3>=5.0.3",
+    "wcwidth>=0.9.5",
     # keep-sorted end
 ]
 
